@@ -5,7 +5,7 @@ services:
     image: mongo:4.2
     restart: always
     volumes:
-      - ./data:/data/db
+      - ./data:/data/db:z
     ports:
       - "27017:27017"
   api:
@@ -15,7 +15,7 @@ services:
     restart: always
     command: npm start
     volumes: 
-      - ./dist:/usr/src/clean-node-api/dist
+      - ./dist:/usr/src/clean-node-api/dist:z
     ports: 
       - "5050:5050"
     links: 

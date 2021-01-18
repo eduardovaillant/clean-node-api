@@ -1,13 +1,13 @@
 import { LogErrorRepository } from '../../data/protocols/db/log/log-error-repository'
 import { AccountModel } from '../../domain/models/account'
 import { ok, serverError } from '../../presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HtttpResponse } from '../../presentation/protocols'
+import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
 import { LogControllerDecorator } from './log-controller-decorator'
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
-    async handle (httpRequest: HttpRequest): Promise<HtttpResponse> {
-      const httpResponse: HtttpResponse = ok(makeFakeAccount())
+    async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+      const httpResponse: HttpResponse = ok(makeFakeAccount())
       return new Promise(resolve => resolve(httpResponse))
     }
   }
@@ -55,7 +55,7 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'valid_password'
 })
 
-const makeFakeServerError = (): HtttpResponse => {
+const makeFakeServerError = (): HttpResponse => {
   const fakeError = new Error()
   fakeError.stack = 'any_stack'
   return serverError(fakeError)

@@ -6,7 +6,7 @@
 2. [X] Valida dados obrigatórios **name**, **email**, **password** e **passwordConfirmation**
 3. [X] Valida que **password** e **passwordConfirmation** são iguais
 4. [X] Valida que o campo **email** é um e-mail válido
-5. [] **Valida** se já existe um usuário com o email fornecido
+5. [X] **Valida** se já existe um usuário com o email fornecido
 6. [X] Gera uma senha **criptografada** (essa senha não pode ser descriptografada)
 7. [X] **Cria** uma conta para o usuário com os dados informados, **substituindo** a senha pela senha criptorafada
 8. [X] Gera um **token** de acesso a partir do ID do usuário

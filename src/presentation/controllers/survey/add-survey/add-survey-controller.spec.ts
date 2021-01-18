@@ -1,28 +1,47 @@
 import { AddSurveyController } from './add-survey-controller'
-import { Validation } from './add-survey-controller-protocols'
+import { Validation, HttpRequest } from './add-survey-controller-protocols'
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    question: 'any_question',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer'
+      }
+    ]
+  }
+})
+
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
+}
+
+interface SutTypes {
+  sut: AddSurveyController
+  validationStub: Validation
+}
+
+const makeSut = (): SutTypes => {
+  const validationStub = makeValidationStub()
+  const sut = new AddSurveyController(validationStub)
+  return {
+    validationStub,
+    sut
+  }
+}
 
 describe('Add Survey', () => {
   test('Should call validation with correct values', async () => {
-    class ValidationStub implements Validation {
-      validate (input: any): Error {
-        return null
-      }
-    }
-    const validationStub = new ValidationStub()
-    const sut = new AddSurveyController(validationStub)
+    const { sut, validationStub } = makeSut()
     const validationSpy = jest.spyOn(validationStub, 'validate')
-    const httpRequest = {
-      body: {
-        question: 'any_question',
-        answers: [
-          {
-            image: 'any_image',
-            answer: 'any_answer'
-          }
-        ]
-      }
-    }
-    await sut.handle(httpRequest)
-    expect(validationSpy).toHaveBeenCalledWith(httpRequest.body)
+    const request = makeFakeRequest()
+    await sut.handle(request)
+    expect(validationSpy).toHaveBeenCalledWith(request.body)
   })
 })

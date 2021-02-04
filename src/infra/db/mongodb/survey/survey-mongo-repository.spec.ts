@@ -1,4 +1,5 @@
 import { Collection } from 'mongodb'
+import { AddSurveyModel } from '../../../../domain/usecases/add-survey'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 
@@ -25,19 +26,7 @@ describe('Account Mongo Repository', () => {
   describe('add', () => {
     test('Should add a survey on success', async () => {
       const sut = makeSut()
-      await sut.add({
-        question: 'any_question',
-        answers: [
-          {
-            image: 'any_image',
-            answer: 'any_answer'
-          },
-          {
-            answer: 'other_answer'
-          }
-        ],
-        date: new Date()
-      })
+      await sut.add(makeFakeSurvey())
       const survey = await surveyCollection.findOne({ question: 'any_question' })
       expect(survey).toBeTruthy()
     })
@@ -45,28 +34,7 @@ describe('Account Mongo Repository', () => {
 
   describe('loadAll', () => {
     test('Should load all surveys on success', async () => {
-      await surveyCollection.insertMany([
-        {
-          question: 'any_question',
-          answers: [
-            {
-              image: 'any_image',
-              answer: 'any_answer'
-            }
-          ],
-          date: new Date()
-        },
-        {
-          question: 'other_question',
-          answers: [
-            {
-              image: 'other_image',
-              answer: 'other_answer'
-            }
-          ],
-          date: new Date()
-        }
-      ])
+      await surveyCollection.insertMany(makeFakeSurveyList())
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)
@@ -81,3 +49,42 @@ describe('Account Mongo Repository', () => {
     })
   })
 })
+
+const makeFakeSurvey = (): AddSurveyModel => (
+  {
+    question: 'any_question',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer'
+      },
+      {
+        answer: 'other_answer'
+      }
+    ],
+    date: new Date()
+  }
+)
+
+const makeFakeSurveyList = (): AddSurveyModel[] => ([
+  {
+    question: 'any_question',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer'
+      }
+    ],
+    date: new Date()
+  },
+  {
+    question: 'other_question',
+    answers: [
+      {
+        image: 'other_image',
+        answer: 'other_answer'
+      }
+    ],
+    date: new Date()
+  }
+])

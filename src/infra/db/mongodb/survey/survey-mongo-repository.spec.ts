@@ -5,6 +5,45 @@ import { Collection } from 'mongodb'
 
 let surveyCollection: Collection
 
+const makeFakeSurvey = (): AddSurveyModel => (
+  {
+    question: 'any_question',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer'
+      },
+      {
+        answer: 'other_answer'
+      }
+    ],
+    date: new Date()
+  }
+)
+
+const makeFakeSurveyList = (): AddSurveyModel[] => ([
+  {
+    question: 'any_question',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer'
+      }
+    ],
+    date: new Date()
+  },
+  {
+    question: 'other_question',
+    answers: [
+      {
+        image: 'other_image',
+        answer: 'other_answer'
+      }
+    ],
+    date: new Date()
+  }
+])
+
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
@@ -48,43 +87,24 @@ describe('Account Mongo Repository', () => {
       expect(surveys.length).toBe(0)
     })
   })
+
+  describe('loadById', () => {
+    test('Should load a survey by id on success', async () => {
+      const res = await surveyCollection.insertOne(
+        {
+          question: 'any_question',
+          answers: [
+            {
+              image: 'any_image',
+              answer: 'any_answer'
+            }
+          ],
+          date: new Date()
+        }
+      )
+      const sut = makeSut()
+      const survey = await sut.loadById(res.ops[0]._id)
+      expect(survey).toBeTruthy()
+    })
+  })
 })
-
-const makeFakeSurvey = (): AddSurveyModel => (
-  {
-    question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer'
-      },
-      {
-        answer: 'other_answer'
-      }
-    ],
-    date: new Date()
-  }
-)
-
-const makeFakeSurveyList = (): AddSurveyModel[] => ([
-  {
-    question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer'
-      }
-    ],
-    date: new Date()
-  },
-  {
-    question: 'other_question',
-    answers: [
-      {
-        image: 'other_image',
-        answer: 'other_answer'
-      }
-    ],
-    date: new Date()
-  }
-])

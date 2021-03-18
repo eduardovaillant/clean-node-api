@@ -8,6 +8,9 @@ const makeFakeRequest = (): HttpRequest => (
   {
     params: {
       surveyId: 'any_survey_id'
+    },
+    body: {
+      answer: 'any_answer'
     }
   }
 )
@@ -69,5 +72,18 @@ describe('SaveSurveyResultController', () => {
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const response = await sut.handle(makeFakeRequest())
     expect(response).toEqual(serverError(new Error()))
+  })
+
+  test('should return 403 if an invalid answer is provided', async () => {
+    const { sut } = makeSut()
+    const httpRespose = await sut.handle({
+      params: {
+        surveyId: 'any_survey_id'
+      },
+      body: {
+        answer: 'invalid_answer'
+      }
+    })
+    expect(httpRespose).toEqual(forbbiden(new InvalidParamError('answer')))
   })
 })

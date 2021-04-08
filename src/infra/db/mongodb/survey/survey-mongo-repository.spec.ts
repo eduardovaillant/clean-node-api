@@ -6,7 +6,7 @@ import { Collection } from 'mongodb'
 
 let surveyCollection: Collection
 
-const makeFakeSurveyList = (): AddSurveyParams[] => ([
+const mockSurveyList = (): AddSurveyParams[] => ([
   {
     question: 'any_question',
     answers: [
@@ -58,7 +58,7 @@ describe('Account Mongo Repository', () => {
 
   describe('loadAll', () => {
     test('Should load all surveys on success', async () => {
-      await surveyCollection.insertMany(makeFakeSurveyList())
+      await surveyCollection.insertMany(mockSurveyList())
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)

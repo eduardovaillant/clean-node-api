@@ -2,7 +2,7 @@
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import { HttpRequest, LoadSurveyById, SaveSurveyResult } from './save-survey-result-controller-protocols'
 import { InvalidParamError } from '@/presentation/errors'
-import { forbbiden, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { mockSaveSurveyResult, mockLoadSurveyById } from '@/presentation/test'
 import { throwError, mockSurveyResultModel } from '@/domain/test'
 import MockDate from 'mockdate'
@@ -56,7 +56,7 @@ describe('SaveSurveyResultController', () => {
     const { sut, loadSurveyByIdStub } = makeSut()
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const httpRespose = await sut.handle(mockRequest())
-    expect(httpRespose).toEqual(forbbiden(new InvalidParamError('surveyId')))
+    expect(httpRespose).toEqual(forbidden(new InvalidParamError('surveyId')))
   })
 
   test('Should return 500 if LoadSurveys throws', async () => {
@@ -76,7 +76,7 @@ describe('SaveSurveyResultController', () => {
         answer: 'invalid_answer'
       }
     })
-    expect(httpRespose).toEqual(forbbiden(new InvalidParamError('answer')))
+    expect(httpRespose).toEqual(forbidden(new InvalidParamError('answer')))
   })
 
   test('should call SaveSurveyResult with correct values', async () => {

@@ -1,6 +1,6 @@
 import { LoadSurveyResultController } from './load-survey-result-controller'
 import { HttpRequest, LoadSurveyById } from './load-survey-result-controller-protocols'
-import { forbbiden } from '@/presentation/helpers/http/http-helper'
+import { forbidden } from '@/presentation/helpers/http/http-helper'
 import { mockLoadSurveyById } from '@/presentation/test'
 import { InvalidParamError } from '@/presentation/errors'
 
@@ -36,6 +36,6 @@ describe('LoadSurveyResultController', () => {
     const { sut, loadSurveyByIdStub } = makeSut()
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const response = await sut.handle(mockRequest())
-    expect(response).toEqual(forbbiden(new InvalidParamError('surveyId')))
+    expect(response).toEqual(forbidden(new InvalidParamError('surveyId')))
   })
 })

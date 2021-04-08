@@ -1,7 +1,7 @@
 import { SignUpController } from './signup-controller'
 import { AddAccount, Validation, Authentication } from './signup-controller-protocols'
 import { HttpRequest } from '@/presentation/protocols'
-import { ok, serverError, badRequest, forbbiden } from '@/presentation/helpers/http/http-helper'
+import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
 import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/errors'
 import { mockValidation, mockAuthentication, mockAddAccount } from '@/presentation/test'
 import { throwError } from '@/domain/test'
@@ -62,7 +62,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null))
     const httResponse = await sut.handle(mockRequest())
-    expect(httResponse).toEqual(forbbiden(new EmailInUseError()))
+    expect(httResponse).toEqual(forbidden(new EmailInUseError()))
   })
 
   test('Should return 200 if valid data is provided', async () => {
